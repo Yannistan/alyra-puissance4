@@ -19,8 +19,8 @@ function display(i, column, player, grid) {
     } else {
         grid[i][column] = 'X'
     }
-        console.log(
-   `    +---+---+---+---+---+---+---+
+    console.log(
+        `    +---+---+---+---+---+---+---+
   6 | ${grid[0][0]} | ${grid[0][1]} | ${grid[0][2]} | ${grid[0][3]} | ${grid[0][4]} | ${grid[0][5]} | ${grid[0][6]} |
     +---+---+---+---+---+---+---+
   5 | ${grid[1][0]} | ${grid[1][1]} | ${grid[1][2]} | ${grid[1][3]} | ${grid[1][4]} | ${grid[0][5]} | ${grid[0][6]} | 
@@ -44,7 +44,7 @@ function play(column, player, grid) {
         if (grid[i][column] === '-') {
             grid[i][column] = player
             console.log(`Joueur courant est ${player}.`)
-        //  console.log('Emplacement choisi: ', i, column, grid[i][column])
+            //  console.log('Emplacement choisi: ', i, column, grid[i][column])
             display(i, column, player, grid)
             return true
         }
@@ -147,36 +147,7 @@ let grid = grille()
 console.log(grid)
 let nom1 = readlineSync.question('Joueur 1 saisissez votre prenom: ')
 let nom2 = readlineSync.question('Joueur 2 saisissez votre prenom: ')
-/*let options = ['put', 'rules', 'help', 'whoami', 'abandon']
-let choix = readlineSync.keyInSelect(options, 'Please choose an action: ')
 
-switch (choix) {
-    case 0:
-        let columns = [0,1,2,3,4,5,6]
-        let col_choix = readlineSync.keyInSelect(columns, 'Please choose an action: ')
-        checkplay(col_choix,player)
-        break;
-    case 1:
-        console.log(`The rules of the game are:`)
-        break;
-    case 2:
-        console.log("help")
-        break;
-    case 3:
-        console.log(`whoami:${player}`)
-        break;
-    case 4:
-        console.log("Abandon:")
-        if (player === 'O') {
-            console.log(`The winner is:"X"`)
-        } else {
-        console.log(`The winner is:"O"`
-        }
-        break;
-    default:
-        console.log('ba')
-
-} */
 let players = ['O', 'X']
 console.log(`${nom1} est joueur ${players[0]}`)
 console.log(`${nom1} est joueur ${players[1]}`)
@@ -184,46 +155,81 @@ let turn = 0
 let winner = null
 
 while (5) {
-    console.log(players);
-    let columns = [0, 1, 2, 3, 4, 5, 6]
-    let choix_col = readlineSync.keyInSelect(columns, `Joueur ${players[turn %2]} please choisissez une colonne: `)
     console.log("turn =", turn);
-    
-    if (gridIsFull(grid) && winner === null) {
-        console.log('Partie terminée, égalité!')
+    let options = ['put', 'rules', 'help', 'whoami', 'abandon']
+    let choix = readlineSync.keyInSelect(options, 'Choisissez une commande: ')
 
-        break;
-    } else if (winner !== null) {
-        if (winner === 'O') {
-            console.log(`Victoire du "O" !`)
-            
+    switch (choix) {
+        case 0:
+            console.log("Playing the game")
             break;
-        } else {
-            console.log(`Victoire du "X" !`)
-            
+        case 1:
+            console.log(`The rules of the game are found in: "https://www.regles-de-jeux.com/regle-du-puissance-4/"`)
             break;
-        }
-    } else {
-        if (play(choix_col, players[turn % 2], grid)) {
-            turn++
-            console.log(turn)
-        }
-        if (players[turn % 2] === 'O') {
-            console.log(`Prochain tour: "O" !`)
-        } else {
-            console.log(`Prochain tour: "X" !`)
-        }
-        winner = checkWinner(grid)
+        case 2:
+            console.log(`Liste des options: "put", "rules", "help", "whoami", "abandon"`)
+            break;
+        case 3:
+            console.log(`whoami:${players[turn % 2]}`)
+            break;
+        case 4:
+            console.log("Abandon:")
+            if (turn % 2 == 0) {
+                console.log(`The winner is:"X"`)
+            } else {
+                console.log(`The winner is:"O"`)
+            }
+            break;
+        default:
+            console.log('bad choice')
+    }
+    if (choix == 0) {
+        let columns = [0, 1, 2, 3, 4, 5, 6]
+        let choix_col = readlineSync.keyInSelect(columns, `Joueur ${players[turn %2]} choisissez une colonne: `)
+        if (gridIsFull(grid) && winner === null) {
+            console.log('Partie terminée, égalité!')
 
-        if (winner != null) {
+            break;
+        } else if (winner !== null) {
             if (winner === 'O') {
                 console.log(`Victoire du "O" !`)
+
                 break;
             } else {
                 console.log(`Victoire du "X" !`)
+
                 break;
             }
+        } else {
+            if (play(choix_col, players[turn % 2], grid)) {
+                turn++
+                console.log(turn)
+            }
+            if (players[turn % 2] === 'O') {
+                console.log(`Prochain tour: "O" !`)
+            } else {
+                console.log(`Prochain tour: "X" !`)
+            }
+            winner = checkWinner(grid)
+
+            if (winner != null) {
+                if (winner === 'O') {
+                    console.log(`Victoire du "O" !`)
+                    break;
+                } else {
+                    console.log(`Victoire du "X" !`)
+                    break;
+                }
+            }
         }
+    } else if (choix == 4) {
+        break;
+    } else if (choix == 1) {
+        continue;
+    } else if (choix == 2) {
+        continue;
+    } else if (choix == 3) {
+        continue;
     }
 }
 console.log("Partie terminée");
